@@ -1,4 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+// next.config.js
 
-export default nextConfig;
+// Use ES module export syntax
+export default {
+  images: {
+    domains: ['localhost'], // add here the domain serving your images
+    path: '/', // the path to your images
+  },
+};
