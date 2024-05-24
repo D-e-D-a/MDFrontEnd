@@ -12,7 +12,7 @@ import { useAuth } from './user-provider';
 const Login = () => {
   const router = useRouter(); // Initialize router for navigation
   const [loggedIn, setLoggedIn] = useState(false);
-  const {error,setError,setUser,setIsAdmin} = useAuth();
+  const { error, setError, setUser, setIsAdmin } = useAuth();
 
   // Function to handle form submission
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -22,25 +22,24 @@ const Login = () => {
     const enteredPassword = data.get('password') as string;
 
     try {
-      const loginDetails = {
-        username: enteredUsername,
-        password: enteredPassword,
-      };
-      const response = await loginUser(loginDetails);
-
-      if (response.data.status === 'Success') {
-        setUser(response);
-        sessionStorage.setItem('user', JSON.stringify(response));
-        // Set a cookie with the user's token
-        document.cookie = `token=${response.data.token}; path=/`;
-        document.cookie = `isAdmin=${response.data.data.user.role === 'ADMIN'}; path=/`;
-        // Redirect to home page if authentication is successful
-        router.push('/home');
-        // Update the loggedIn state after redirecting
-        setLoggedIn(true);
-      } else {
-        console.log('Incorrect email or password');
-      }
+      loginUser(enteredUsername, enteredPassword)
+        .then((response) => {
+          if (response.data.status === 'Success') {
+            setUser(response);
+            sessionStorage.setItem('user', JSON.stringify(response));
+            // Set a cookie with the user's token
+            document.cookie = `token=${response.data.token}; path=/`;
+            document.cookie = `isAdmin=${response.data.data.user.role === 'ADMIN'}; path=/`;
+            // Update the loggedIn state after redirecting
+            setLoggedIn(true);
+          } else {
+            console.log('Incorrect email or password');
+          }
+        })
+        .finally(() => {
+          // Redirect to home page if authentication is successful
+          router.push('/home');
+        });
     } catch (error) {
       console.log(error);
       setError(true);
@@ -85,16 +84,14 @@ const Login = () => {
                   id="password"
                   placeholder="••••••••"
                   required
-                  onPaste={handlePaste}
+                  // onPaste={handlePaste}
                 />{' '}
                 <Eye
                   className="absolute  right-2 top-10  h-4 w-4 text-white cursor-pointer"
                   onClick={togglePasswordVisibility}
                 />
               </div>
-              {
-                error && <p className="text-red-500">Incorrect username or password</p>
-              }
+              {error && <p className="text-red-500">Incorrect username or password</p>}
 
               <Button type="submit" className="w-full px-5 text-white">
                 {loggedIn ? (

@@ -1,6 +1,7 @@
 'use client';
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
-import { RegisterResponseProps } from '@/lib/types';
+import { RegisterResponseProps, SessionRootObjectProps } from '@/lib/types';
+import { getSession } from '@/lib/apiCalls';
 
 // Define the shape of the context value
 interface UserContextProps {
@@ -16,6 +17,8 @@ interface UserContextProps {
   setQuestions?: React.Dispatch<React.SetStateAction<any | undefined>>;
   isAdmin?: boolean;
   setIsAdmin?: React.Dispatch<React.SetStateAction<boolean>>;
+  sessionData?: SessionRootObjectProps | null;
+  setSessionData?: React.Dispatch<React.SetStateAction<SessionRootObjectProps | null>>;
 }
 
 // Create the context
@@ -31,21 +34,46 @@ export default function UserProvider({ children }: PropsWithChildren<{}>) {
   const [token, setToken] = useState('');
   const [error, setError] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [sessionData, setSessionData] = useState<SessionRootObjectProps | null>(null);
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem('user');
-    const storedToken = document.cookie.split('; ').find((row) => row.startsWith('token='));
-    setToken(storedToken?.split('=')[1] || '');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false); // Change isLoading to false after retrieving user data
+    const initialize = async () => {
+      const storedUser = sessionStorage.getItem('user');
+      const storedToken = document.cookie.split('; ').find((row) => row.startsWith('token='));
+      const tokenValue = storedToken?.split('=')[1] || '';
+      setToken(tokenValue);
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+
+      if (tokenValue) {
+        try {
+          const response = await getSession(tokenValue);
+          sessionStorage.setItem('sessionData', JSON.stringify(response?.data));
+          setSessionData(response?.data || null);
+        } catch (error) {
+          console.error('Error fetching session data:', error);
+          setError(true);
+        }
+      }
+
+      setIsLoading(false); // Change isLoading to false after retrieving user data and session data
+    };
+
+    initialize();
   }, []);
 
   useEffect(() => {
     user?.data.data.user.role === 'ADMIN' && setIsAdmin(true);
   }, [user]);
-  
+
+  // useEffect(() => {
+  //   const storedSessionData = sessionStorage.getItem('sessionData');
+  //   if (storedSessionData) {
+  //     setSessionData(JSON.parse(storedSessionData));
+  //   }
+  // }, []);
 
   // Define the value to be passed to the context provider
   const value: UserContextProps = {
@@ -62,6 +90,8 @@ export default function UserProvider({ children }: PropsWithChildren<{}>) {
     setIsAdmin,
 
     setIsLoading,
+    sessionData,
+    setSessionData,
   };
 
   // Render the provider with the value and children

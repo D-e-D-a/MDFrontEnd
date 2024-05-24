@@ -89,7 +89,7 @@ const Sessions = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col space-y-1.5">
-                      <label htmlFor="title">Pitanje</label>
+                      <label htmlFor="title">Sesija</label>
                       <Input
                         id="title"
                         placeholder="Naziv sesije"
@@ -117,9 +117,9 @@ const Sessions = () => {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                      <DialogTitle>Delete question</DialogTitle>
+                      <DialogTitle>Delete session</DialogTitle>
                       <DialogDescription>
-                        Are you sure you want to delete this question?
+                        Are you sure you want to delete this session?
                       </DialogDescription>
                     </DialogHeader>
 

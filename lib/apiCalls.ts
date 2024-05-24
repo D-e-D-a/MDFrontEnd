@@ -14,9 +14,12 @@ export async function registerUser(userDetails: User) {
   }
 }
 
-export async function loginUser(loginDetails: User) {
+export async function loginUser(username: string, password: string) {
   try {
-    const response: RegisterResponseProps = await axios.post(`${baseUrl}/auth/login`, loginDetails);
+    const response: RegisterResponseProps = await axios.post(`${baseUrl}/auth/login`, {
+      username: username,
+      password: password,
+    });
     return response;
   } catch (error) {
     console.error('Error:', error);
@@ -179,7 +182,7 @@ export const sendQuestion = async (
 };
 
 export const updateQuestion = async (token: string, id: string, title: string) => {
-  console.log("🚀 ~ updateQuestion ~ token: string, id: string, title: string:", token, id, title)
+  console.log('🚀 ~ updateQuestion ~ token: string, id: string, title: string:', token, id, title);
   try {
     const response = await axios.patch(
       `${baseUrl}/question/${id}`,
@@ -291,7 +294,7 @@ export const deleteUser = async (token: string, id: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("🚀 ~ deleteUser ~ response:", response)
+    console.log('🚀 ~ deleteUser ~ response:', response);
     return response.data;
   } catch (error) {
     console.error('Error:', error);

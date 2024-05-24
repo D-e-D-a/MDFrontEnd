@@ -11,18 +11,27 @@ import { Textarea } from './ui/textarea';
 import Link from 'next/link';
 
 const Session = () => {
-  const { user, isLoading, id, token, setQuestions } = useAuth();
-  const [sessionData, setSessionData] = useState<SessionRootObjectProps | null>(null);
+  const { user, isLoading, id, token, setQuestions, setIsLoading, sessionData } = useAuth();
+  // const [sessionData, setSessionData] = useState<SessionRootObjectProps | null>(null);
   const [answers, setAnswers] = useState<votesProps>();
   const [comments, setComments] = useState<{ [key: number]: string }>({});
   const [goToResults, setGoToResults] = useState(false);
   const [showCommentFields, setShowCommentFields] = useState<{ [key: number]: boolean }>({});
 
-  useEffect(() => {
-    getSession(token).then((data) => {
-      setSessionData(data?.data);
-    });
-  }, [token]);
+  // useEffect(() => {
+  //   const fetchSessionData = async () => {
+  //     try {
+  //       const response = await getSession(token);
+  //       setSessionData(response?.data || null);
+  //     } catch (error) {
+  //       console.error('Error fetching session data:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchSessionData();
+  // }, []);
 
   useEffect(() => {
     if (sessionData && sessionData.data && sessionData.data.sessions) {
@@ -80,11 +89,19 @@ const Session = () => {
     }
   };
 
+  useEffect(() => {
+    if (sessionData === null) {
+      const timer = setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [sessionData]);
+
   // Show loading state if isLoading is true
-  if (isLoading) {
+  if (isLoading || sessionData === null) {
     return <Placeholder />;
   }
-  console.log(sessionData);
 
   // Show user data if isLoading is false
   return (
