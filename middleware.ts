@@ -22,5 +22,5 @@ export function middleware(req: NextRequest) {
 
 // Configuration for the middleware
 export const config = {
-  matcher: ['/home', '/admin/:path*', '/account'], // Protect all routes under /admin
+  matcher: ['/home', '/admin/:path*', '/results'], // Protect all routes under /admin
 };

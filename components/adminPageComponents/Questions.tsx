@@ -1,14 +1,7 @@
 'use client';
 import { Input } from '../ui/input';
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { Button } from '../ui/button';
 
 import { deleteQuestion, getSession, sendQuestion, updateQuestion } from '@/lib/apiCalls';
@@ -71,12 +64,15 @@ export default function Questions() {
       window.location.reload();
     });
   };
+  if (sessionData?.data?.sessions.length === 0) {
+    return <div className='text-3xl h-screen flex items-center justify-center'>No sessions, please create a session</div>;
+  }
   return (
     <div className="flex flex-col items-center justify-center w-full  mt-20">
       {sessionData?.data?.sessions.map((session, index) => (
         <React.Fragment key={session.id}>
           <h1 className="text-3xl font-bold mb-10 text-primary">{session.title}</h1>
-          <Table  className="mb-8 w-[90%] mx-auto border">
+          <Table className="mb-8 w-[90%] mx-auto border">
             <TableHeader>
               <TableRow>
                 <TableHead className="text-lg font-semibold text-slate-500">
@@ -218,7 +214,6 @@ export default function Questions() {
           </Table>
         </React.Fragment>
       ))}
-    
     </div>
   );
 }

@@ -68,12 +68,6 @@ export default function UserProvider({ children }: PropsWithChildren<{}>) {
     user?.data.data.user.role === 'ADMIN' && setIsAdmin(true);
   }, [user]);
 
-  // useEffect(() => {
-  //   const storedSessionData = sessionStorage.getItem('sessionData');
-  //   if (storedSessionData) {
-  //     setSessionData(JSON.parse(storedSessionData));
-  //   }
-  // }, []);
 
   // Define the value to be passed to the context provider
   const value: UserContextProps = {
@@ -88,7 +82,6 @@ export default function UserProvider({ children }: PropsWithChildren<{}>) {
     setQuestions,
     isAdmin,
     setIsAdmin,
-
     setIsLoading,
     sessionData,
     setSessionData,

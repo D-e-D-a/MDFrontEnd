@@ -24,6 +24,15 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
 const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -32,6 +41,7 @@ const Users = () => {
   const [email, setEmail] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
   const { token } = useAuth();
 
   useEffect(() => {
@@ -104,6 +114,20 @@ const Users = () => {
                         />
                       </div>
                       <div className="flex flex-col space-y-1.5">
+                        <label>Role korisnika</label>
+                        <Select onValueChange={(e) => setRole(e)}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select role for a user" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="ADMIN">ADMIN</SelectItem>
+                              <SelectItem value="USER">USER</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col space-y-1.5">
                         <label htmlFor="oldPassword">Old Password</label>
                         <Input
                           id="oldPassword"
@@ -128,6 +152,7 @@ const Users = () => {
                         const updatedFirstName = firstName !== '' ? firstName : user.firstName;
                         const updatedLastName = lastName !== '' ? lastName : user.lastName;
                         const updatedEmail = email !== '' ? email : user.email;
+                        const updatedRole = role !== '' ? role : user.role;
 
                         // Update user details
                         updateUser(
@@ -136,6 +161,7 @@ const Users = () => {
                           updatedFirstName,
                           updatedLastName,
                           updatedEmail,
+                          updatedRole,
                         )
                           .then((data) => {
                             console.log(data);
@@ -182,7 +208,6 @@ const Users = () => {
                   </DialogHeader>
 
                   <DialogFooter>
-                 
                     <Button
                       variant={'destructive'}
                       onClick={() => {

@@ -100,10 +100,9 @@ export async function updateSession(token: string, sessionId: string, sessionNam
 export async function deleteSession(token: string, sessionId: string) {
   try {
     if (token) {
-      const response = await axios.delete(`${baseUrl}/sessions/${sessionId}`, {
+      await axios.delete(`${baseUrl}/sessions/${sessionId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return response;
     }
   } catch (error) {
     console.error('Error:', error);
@@ -224,7 +223,9 @@ export const updateUser = async (
   firstName: string,
   lastName: string,
   email: string,
+  role: string,
 ) => {
+  console.log("🚀 ~ token:", token,role,firstName,lastName,email)
   try {
     const response = await axios.patch(
       `${baseUrl}/user/${id}`,
@@ -232,6 +233,7 @@ export const updateUser = async (
         firstName: firstName,
         lastName: lastName,
         email: email,
+        role: role,
       },
       {
         headers: {

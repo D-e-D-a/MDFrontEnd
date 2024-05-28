@@ -22,24 +22,26 @@ const Login = () => {
     const enteredPassword = data.get('password') as string;
 
     try {
-      loginUser(enteredUsername, enteredPassword)
-        .then((response) => {
-          if (response.data.status === 'Success') {
-            setUser(response);
-            sessionStorage.setItem('user', JSON.stringify(response));
-            // Set a cookie with the user's token
-            document.cookie = `token=${response.data.token}; path=/`;
-            document.cookie = `isAdmin=${response.data.data.user.role === 'ADMIN'}; path=/`;
-            // Update the loggedIn state after redirecting
-            setLoggedIn(true);
-          } else {
-            console.log('Incorrect email or password');
-          }
-        })
-        .finally(() => {
-          // Redirect to home page if authentication is successful
-          router.push('/home');
-        });
+      const response = await loginUser(enteredUsername, enteredPassword);
+
+      if (response.data.status === 'Success') {
+        setUser(response);
+        sessionStorage.setItem('user', JSON.stringify(response));
+
+        // Set session cookies without specifying expires or max-age
+        document.cookie = `token=${response.data.token}; path=/; SameSite=Strict`;
+        document.cookie = `isAdmin=${
+          response.data.data.user.role === 'ADMIN'
+        }; path=/; SameSite=Strict`;
+
+        // Update the loggedIn state after redirecting
+        setLoggedIn(true);
+
+        // Redirect to home page if authentication is successful
+        router.push('/home');
+      } else {
+        console.log('Incorrect email or password');
+      }
     } catch (error) {
       console.log(error);
       setError(true);

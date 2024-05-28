@@ -24,7 +24,9 @@ const FloatingButtons = () => {
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline"> <User2 className=" h-4 w-4" /></Button>
+          <Button variant="outline">
+            <User2 className=" h-4 w-4" />
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="w-fit flex flex-col gap-5">
           <ThemeToggle />
