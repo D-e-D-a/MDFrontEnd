@@ -20,8 +20,8 @@ export interface User {
   username: string;
   password: string;
   role: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 //==============================================================================
 

@@ -4,7 +4,6 @@ import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Button, buttonVariants } from './ui/button';
 import Link from 'next/link';
-import axios from 'axios';
 import { registerUser } from '@/lib/apiCalls';
 
 export default function CreateAcc() {
@@ -34,6 +33,7 @@ export default function CreateAcc() {
         username: enteredUsername,
         password: enteredPassword,
         role: 'USER',
+        id: 0,
       };
       const response = await registerUser(userDetails);
       console.log(response); // Assuming your API returns some data

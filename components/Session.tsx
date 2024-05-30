@@ -12,26 +12,11 @@ import Link from 'next/link';
 
 const Session = () => {
   const { user, isLoading, id, token, setQuestions, setIsLoading, sessionData } = useAuth();
-  // const [sessionData, setSessionData] = useState<SessionRootObjectProps | null>(null);
   const [answers, setAnswers] = useState<votesProps>();
   const [comments, setComments] = useState<{ [key: number]: string }>({});
   const [goToResults, setGoToResults] = useState(false);
   const [showCommentFields, setShowCommentFields] = useState<{ [key: number]: boolean }>({});
-
-  // useEffect(() => {
-  //   const fetchSessionData = async () => {
-  //     try {
-  //       const response = await getSession(token);
-  //       setSessionData(response?.data || null);
-  //     } catch (error) {
-  //       console.error('Error fetching session data:', error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchSessionData();
-  // }, []);
+  const [answeredQuestions, setAnsweredQuestions] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     if (sessionData && sessionData.data && sessionData.data.sessions) {
@@ -54,6 +39,16 @@ const Session = () => {
       questionId,
       choice,
     });
+    // Update the answeredQuestions state
+    setAnsweredQuestions((prev) => ({
+      ...prev,
+      [questionId]: true,
+    }));
+    // Update the answeredQuestions state
+    setAnsweredQuestions((prev) => ({
+      ...prev,
+      [questionId]: true,
+    }));
 
     // Show comment field for the selected question
     setShowCommentFields((prevState) => ({
@@ -164,6 +159,19 @@ const Session = () => {
                           onChange={(e) => handleCommentChange(question.id, e)}
                           disabled={!showCommentFields[question.id]}
                         />
+                        {goToResults ? (
+                          <Link href="/results" className={`${buttonVariants({})}  w-full`}>
+                            Pogledaj rezultate
+                          </Link>
+                        ) : (
+                          <Button
+                            className=" w-full"
+                            type="submit"
+                            disabled={!answeredQuestions[question.id]}
+                          >
+                            Pošalji
+                          </Button>
+                        )}
                       </div>
                     );
                   })}
@@ -172,15 +180,6 @@ const Session = () => {
             );
           })}
         </div>
-        {goToResults ? (
-          <Link href="/results" className={`${buttonVariants({})} mt-20`}>
-            Pogledaj rezultate
-          </Link>
-        ) : (
-          <Button className="mt-20" type="submit" disabled={!answers}>
-            Pošalji
-          </Button>
-        )}
       </form>
     </div>
   );

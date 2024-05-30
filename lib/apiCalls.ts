@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { RegisterResponseProps, User, votesProps } from './types';
-import { title } from 'process';
 
 export const baseUrl = 'http://localhost:8000/api';
 
@@ -27,19 +26,19 @@ export async function loginUser(username: string, password: string) {
   }
 }
 
-export async function getUserDetails(id: number, token: string) {
-  try {
-    const response = await axios.get(`${baseUrl}/auth/user/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token})}`,
-      },
-    });
-    return response;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
+// export async function getUserDetails(id: number, token: string) {
+//   try {
+//     const response = await axios.get(`${baseUrl}/auth/users/${id}`, {
+//       headers: {
+//         Authorization: `Bearer ${token})}`,
+//       },
+//     });
+//     return response;
+//   } catch (error) {
+//     console.error('Error:', error);
+//     throw error;
+//   }
+// }
 
 //======================================================================================================================
 
@@ -115,7 +114,7 @@ export async function deleteSession(token: string, sessionId: string) {
 export async function sendVotes(token: string, votes: votesProps) {
   try {
     if (token) {
-      const response = await axios.post(`${baseUrl}/vote`, votes, {
+      const response = await axios.post(`${baseUrl}/votes`, votes, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response;
@@ -132,7 +131,7 @@ export async function sendComment(token: string, id: number | undefined, comment
   try {
     if (token) {
       const response = await axios.post(
-        `${baseUrl}/question/${id}/comments`,
+        `${baseUrl}/questions/${id}/comments`,
         {
           text: comment,
         },
@@ -166,7 +165,7 @@ export const sendQuestion = async (
     }
 
     // Send POST request using Axios
-    const response = await axios.post('http://localhost:8000/api/question', formData, {
+    const response = await axios.post('http://localhost:8000/api/questions', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
@@ -181,10 +180,9 @@ export const sendQuestion = async (
 };
 
 export const updateQuestion = async (token: string, id: string, title: string) => {
-  console.log('🚀 ~ updateQuestion ~ token: string, id: string, title: string:', token, id, title);
   try {
     const response = await axios.patch(
-      `${baseUrl}/question/${id}`,
+      `${baseUrl}/questions/${id}`,
       {
         title: title,
       },
@@ -203,7 +201,7 @@ export const updateQuestion = async (token: string, id: string, title: string) =
 
 export const deleteQuestion = async (token: string, id: string) => {
   try {
-    const response = await axios.delete(`${baseUrl}/question/${id}`, {
+    const response = await axios.delete(`${baseUrl}/questions/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -225,7 +223,6 @@ export const updateUser = async (
   email: string,
   role: string,
 ) => {
-  console.log("🚀 ~ token:", token,role,firstName,lastName,email)
   try {
     const response = await axios.patch(
       `${baseUrl}/user/${id}`,
@@ -276,16 +273,18 @@ export const updateUserPassword = async (
 };
 
 export const getUsers = async (token: string) => {
-  try {
-    const response = await axios.get(`${baseUrl}/user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
+  if (token) {
+    try {
+      const response = await axios.get(`${baseUrl}/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
   }
 };
 
