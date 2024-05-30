@@ -225,7 +225,7 @@ export const updateUser = async (
 ) => {
   try {
     const response = await axios.patch(
-      `${baseUrl}/user/${id}`,
+      `${baseUrl}/users/${id}`,
       {
         firstName: firstName,
         lastName: lastName,
@@ -253,7 +253,7 @@ export const updateUserPassword = async (
 ) => {
   try {
     const response = await axios.patch(
-      `${baseUrl}/user/user-password/${id}`,
+      `${baseUrl}/users/user-password/${id}`,
 
       {
         currentPassword: oldPassword,
