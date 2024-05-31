@@ -10,7 +10,6 @@ import { SessionRootObjectProps } from '@/lib/types';
 export default function Voting() {
   const { questions, token } = useAuth();
   const [results, setResults] = useState<SessionRootObjectProps>();
-  const [sessionId, setSessionId] = useState<number[]>([]);
 
   useEffect(() => {
     getSession(token)

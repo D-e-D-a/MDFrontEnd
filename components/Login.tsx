@@ -86,7 +86,7 @@ const Login = () => {
                   id="password"
                   placeholder="••••••••"
                   required
-                  // onPaste={handlePaste}
+                  onPaste={handlePaste}
                 />{' '}
                 <Eye
                   className="absolute  right-2 top-10  h-4 w-4 text-white cursor-pointer"

@@ -14,9 +14,9 @@ const Session = () => {
   const { user, isLoading, id, token, setQuestions, setIsLoading, sessionData } = useAuth();
   const [answers, setAnswers] = useState<votesProps>();
   const [comments, setComments] = useState<{ [key: number]: string }>({});
-  const [goToResults, setGoToResults] = useState(false);
   const [showCommentFields, setShowCommentFields] = useState<{ [key: number]: boolean }>({});
   const [answeredQuestions, setAnsweredQuestions] = useState<{ [key: number]: boolean }>({});
+  const [submittedQuestions, setSubmittedQuestions] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     if (sessionData && sessionData.data && sessionData.data.sessions) {
@@ -63,6 +63,7 @@ const Session = () => {
     }));
   };
 
+  // Modify the handleSend function
   const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -71,9 +72,14 @@ const Session = () => {
     }
 
     sendVotes(token, answers).then((data) => {
-      data?.status === 201 && setGoToResults(true);
+      if (data?.status === 201) {
+        // Update the submittedQuestions state
+        setSubmittedQuestions((prev) => ({
+          ...prev,
+          [answers.questionId]: true,
+        }));
+      }
     });
-
     if (comments[answers.questionId]) {
       sendComment(token, answers.questionId, comments[answers.questionId]);
       setComments((prevComments) => {
@@ -159,7 +165,7 @@ const Session = () => {
                           onChange={(e) => handleCommentChange(question.id, e)}
                           disabled={!showCommentFields[question.id]}
                         />
-                        {goToResults ? (
+                        {submittedQuestions[question.id] ? (
                           <Link href="/results" className={`${buttonVariants({})}  w-full`}>
                             Pogledaj rezultate
                           </Link>
