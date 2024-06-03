@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { RegisterResponseProps, User, votesProps } from './types';
 
-export const baseUrl = 'http://localhost:8000/api';
+export const baseUrl = 'http://18.184.94.205/api';
 
 export async function registerUser(userDetails: User) {
   try {
@@ -165,7 +165,7 @@ export const sendQuestion = async (
     }
 
     // Send POST request using Axios
-    const response = await axios.post('http://localhost:8000/api/questions', formData, {
+    const response = await axios.post(`${baseUrl}/questions`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
