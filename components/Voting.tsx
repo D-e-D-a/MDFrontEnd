@@ -1,82 +1,110 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from './user-provider';
-import { getSession } from '@/lib/apiCalls';
-import Link from 'next/link';
-import { buttonVariants } from './ui/button';
+import { getSessionById } from '@/lib/apiCalls';
 import Placeholder from './Placeholder';
-import { SessionRootObjectProps } from '@/lib/types';
+import { Question, Session, votesProps } from '@/lib/types';
+import { Chart } from 'react-google-charts';
 
-export default function Voting() {
-  const { questions, token } = useAuth();
-  const [results, setResults] = useState<SessionRootObjectProps>();
+interface VotingProps {
+  id: string | number;
+}
+interface SingleSessionProps {
+  status: string;
+  data: Session;
+}
+
+export default function Voting({ id }: VotingProps) {
+  const { token } = useAuth();
+  const [results, setResults] = useState<SingleSessionProps>();
 
   useEffect(() => {
-    getSession(token)
+    getSessionById(token, id)
       .then((data) => {
         setResults(data?.data);
       })
       .catch((error) => {
         console.error('Error fetching session data:', error);
       });
-  }, [questions, token]);
+  }, [id, token]);
 
   if (!results) {
     return <Placeholder />;
   }
-  console.log(results);
 
   return (
-    <div className="flex flex-wrap items-center justify-around h-screen gap-6">
-      {questions && questions.length > 0 ? (
-        results?.data?.sessions?.map((result, index) => {
-          return (
-            <div key={index} className="h-[80%]">
-              <h1 className="text-2xl font-bold mb-4">Sesija: {result.title}</h1>
-              <div className="">
-                <p className="mb-2 text-lg font-semibold">Pitanje je:</p>
-                {result.questions.map((dataItem, dataIndex) => {
-                  // Count the 'YES' and 'NO' votes
-                  const yesVotes = dataItem.votes.filter((vote) => vote.choice === 'YES').length;
-                  const noVotes = dataItem.votes.filter((vote) => vote.choice === 'NO').length;
+    <div className="flex flex-col items-center justify-center min-h-screen  py-8">
+      {results?.data?.questions.map((question: Question, index: number) => {
+        // Count the 'YES' and 'NO' votes
+        const yesVotes = question.votes.filter((vote: votesProps) => vote.choice === 'YES').length;
+        const noVotes = question.votes.filter((vote: votesProps) => vote.choice === 'NO').length;
+        const abstainVotes = question.votes.filter(
+          (vote: votesProps) => vote.choice === 'ABSTAIN',
+        ).length;
 
-                  return (
-                    <div
-                      key={dataIndex}
-                      className="border border-primary p-4 flex flex-col gap-4 mt-4"
-                    >
-                      <h2>
-                        {dataItem.id}.{dataItem.title}
-                      </h2>
-                      <p>Yes votes: {yesVotes}</p>
-                      <p>No votes: {noVotes}</p>
-                      <div>
-                        <h3>Comments:</h3>
-                        {dataItem.comments.length === 0 ? (
-                          <p>No comments yet</p>
-                        ) : (
-                          <div className="border border-secondary p-4 h-28 overflow-auto">
-                            {dataItem.comments.map((comment, commentIndex) => (
-                              <p key={commentIndex}>{comment.text}</p>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+        // Prepare data for the chart
+        const chartData = [
+          ['Vote', 'Count'],
+          ['Yes', yesVotes],
+          ['No', noVotes],
+          ['Abstain', abstainVotes],
+        ];
+        const chartOptions = {
+          is3D: true,
+          backgroundColor: 'transparent',
+          colors: ['#008000','#FF0000','#0000FF' ],
+          legend: {
+            textStyle: {
+              color: 'white',
+              fontSize: 16,
+            },
+          },
+        };
+
+        return (
+          <div key={index} className="bg-gray-900 rounded-lg shadow-md p-6 w-full max-w-4xl mb-8">
+            <h1 className="text-3xl font-bold mb-4 text-center">{results.data.title}</h1>
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold mb-2">
+                {index + 1}. {question.title}
+              </h2>
+              <Chart
+                chartType="PieChart"
+                data={chartData}
+                options={chartOptions}
+                width="100%"
+                height="400px"
+                legendToggle
+              />
+              <div className="mt-4">
+                <p className="text-lg">
+                  Yes votes: <span className="font-bold">{yesVotes}</span>
+                </p>
+                <p className="text-lg">
+                  No votes: <span className="font-bold">{noVotes}</span>
+                </p>
+                <p className="text-lg">
+                  Abstain votes: <span className="font-bold">{abstainVotes}</span>
+                </p>
+              </div>
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold">Comments:</h3>
+                {question.comments.length === 0 ? (
+                  <p className="text-gray-600">No comments yet</p>
+                ) : (
+                  <div className="border border-gray-300 p-4 h-28 overflow-auto rounded-md mt-2">
+                    {question.comments.map((comment, commentIndex) => (
+                      <p key={commentIndex} className="text-gray-400 mb-2">
+                        {comment.text}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-          );
-        })
-      ) : (
-        <p className="text-center flex items-center justify-center  h-screen">
-          Molimo vas da prvo glasate na pitanja sa{' '}
-          <Link href={'/home'} className={buttonVariants({ variant: 'link' })}>
-            pocetne stranice
-          </Link>
-        </p>
-      )}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -93,7 +93,7 @@ const Sessions = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col space-y-1.5">
-                      <label htmlFor="title">Sesija</label>
+                      <label htmlFor="title">Sjednica</label>
                       <Input
                         id="title"
                         placeholder="Naziv sesije"

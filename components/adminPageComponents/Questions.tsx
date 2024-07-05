@@ -31,6 +31,7 @@ import React from 'react';
 
 export default function Questions() {
   const [questionTitle, setQuestionTitle] = useState('');
+  const [agendaTitle, setAgendaTitle] = useState('');
   const [file, setFile] = useState<File[]>([]);
   const [sessionData, setSessionData] = useState<SessionRootObjectProps | null>(null);
   // const [sessionId, setSessionId] = useState<string>('');
@@ -43,8 +44,7 @@ export default function Questions() {
   }, [token]);
 
   const handleSubmitQuestion = async (token: string, questionTitle: string, sessionId: string) => {
-    sendQuestion(token, questionTitle, sessionId, file[0]).then((data) => {
-      console.log('🚀 ~ sendQuestion ~ data:', data);
+    sendQuestion(token, agendaTitle, questionTitle, sessionId, file[0]).then((data) => {
       if (data) {
         window.location.reload();
       }
@@ -52,7 +52,7 @@ export default function Questions() {
   };
 
   const handleUpdateQuestion = async (token: string, questionId: string, questionTitle: string) => {
-    updateQuestion(token, questionId, questionTitle).then((data) => {
+    updateQuestion(token, questionId, agendaTitle, questionTitle).then((data) => {
       if (data) {
         window.location.reload();
       }
@@ -65,7 +65,11 @@ export default function Questions() {
     });
   };
   if (sessionData?.data?.sessions.length === 0) {
-    return <div className='text-3xl h-screen flex items-center justify-center'>No sessions, please create a session</div>;
+    return (
+      <div className="text-3xl h-screen flex items-center justify-center">
+        No sessions, please create a session
+      </div>
+    );
   }
   return (
     <div className="flex flex-col items-center justify-center w-full  mt-20">
@@ -75,6 +79,7 @@ export default function Questions() {
           <Table className="mb-8 w-[90%] mx-auto border">
             <TableHeader>
               <TableRow>
+                <TableHead className="text-lg font-semibold text-slate-500">Agenda Title</TableHead>
                 <TableHead className="text-lg font-semibold text-slate-500">
                   Question Title
                 </TableHead>
@@ -86,6 +91,7 @@ export default function Questions() {
               {session.questions.map((question, index) => (
                 <TableRow key={index}>
                   <TableCell>{question.title}</TableCell>
+                  <TableCell>{question.content}</TableCell>
                   {/* Edit question */}
                   <TableCell>
                     <Dialog>
@@ -101,6 +107,15 @@ export default function Questions() {
                             Are you sure you want to edit this question?
                           </DialogDescription>
                         </DialogHeader>
+                        <div className="flex flex-col space-y-1.5">
+                          <label htmlFor="agenda">Dnevni red</label>
+                          <Input
+                            id="agenda"
+                            placeholder="Naziv dnevnog reda"
+                            // value={question.title}
+                            onChange={(e) => setAgendaTitle(e.target.value)}
+                          />
+                        </div>
                         <div className="flex flex-col space-y-1.5">
                           <label htmlFor="title">Pitanje</label>
                           <Input
@@ -154,7 +169,7 @@ export default function Questions() {
               ))}
               {/* Add question */}
               <TableRow>
-                <TableCell colSpan={3} className="text-center">
+                <TableCell colSpan={4} className="text-center">
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline" className="hover:bg-green-500 mx-auto">
@@ -168,6 +183,14 @@ export default function Questions() {
                           Enter the details for the new question.
                         </DialogDescription>
                       </DialogHeader>
+                      <div className="flex flex-col space-y-1.5">
+                        <label htmlFor="agenda">Dnevni red</label>
+                        <Input
+                          id="agenda"
+                          placeholder="Naziv dnevnog reda"
+                          onChange={(e) => setAgendaTitle(e.target.value)}
+                        />
+                      </div>
                       <div className="flex flex-col space-y-1.5">
                         <label htmlFor="title">Pitanje</label>
                         <Input

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { RegisterResponseProps, User, votesProps } from './types';
 
-export const baseUrl = 'http://18.184.94.205/api';
+export const baseUrl = 'http://localhost:8000/api';
 
 export async function registerUser(userDetails: User) {
   try {
@@ -46,6 +46,19 @@ export async function getSession(token: string) {
   try {
     if (token) {
       const response = await axios.get(`${baseUrl}/sessions`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response;
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+export async function getSessionById(token: string, sessionId: string | number) {
+  try {
+    if (token) {
+      const response = await axios.get(`${baseUrl}/sessions/${sessionId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response;
@@ -152,6 +165,7 @@ export async function sendComment(token: string, id: number | undefined, comment
 export const sendQuestion = async (
   token: string,
   title: string,
+  content: string,
   sessionId: string,
   file?: File,
 ) => {
@@ -159,6 +173,7 @@ export const sendQuestion = async (
     // Create FormData object
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('content', content);
     formData.append('sessionId', sessionId);
     if (file) {
       formData.append('file', file);
@@ -179,12 +194,13 @@ export const sendQuestion = async (
   }
 };
 
-export const updateQuestion = async (token: string, id: string, title: string) => {
+export const updateQuestion = async (token: string, id: string, title: string, content: string) => {
   try {
     const response = await axios.patch(
       `${baseUrl}/questions/${id}`,
       {
         title: title,
+        content: content,
       },
       {
         headers: {

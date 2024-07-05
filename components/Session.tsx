@@ -1,5 +1,5 @@
 'use client';
-import { SessionRootObjectProps, questionsProps, votesProps } from '@/lib/types';
+import { SessionRootObjectProps, Question, votesProps } from '@/lib/types';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from './user-provider';
 import { Button, buttonVariants } from './ui/button';
@@ -9,6 +9,15 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
 
 const Session = () => {
   const { user, isLoading, id, token, setQuestions, setIsLoading, sessionData } = useAuth();
@@ -20,7 +29,7 @@ const Session = () => {
 
   useEffect(() => {
     if (sessionData && sessionData.data && sessionData.data.sessions) {
-      let allQuestions: questionsProps[] = [];
+      let allQuestions: Question[] = [];
       sessionData.data.sessions.forEach((session) => {
         if (session && session.questions) {
           allQuestions = [...allQuestions, ...session.questions];
@@ -107,86 +116,30 @@ const Session = () => {
   // Show user data if isLoading is false
   return (
     <div className="min-h-screen w-full relative flex flex-col items-center justify-center ">
-      <div className="space-y-4 mt-28">
-        <h1 className="text-2xl md:text-4xl">Dobro dosli {user?.data.data.user.firstName}</h1>
+      <div className="space-y-4 mt-28 text-center">
+        <h1 className="text-2xl md:text-4xl">Dobro dosli na sajt za glasanje</h1>
         {sessionData?.data.sessions.length === 0 ? (
-          <h2 className="text-xl font-semibold">Nema sesija</h2>
+          <h2 className="text-xl font-semibold">Nema sejednica</h2>
         ) : (
-          <h2> Danas imamo {sessionData?.data.pageInfo.total} sesiju/e o kojima se glasa:</h2>
+          <h2> Danas imamo {sessionData?.data.pageInfo.total} sjednicu/e</h2>
         )}
       </div>
-      <form className="mt-4 flex flex-col items-center" onSubmit={handleSend}>
+      <div className="mt-4 flex flex-col items-center" >
         <div className="flex flex-wrap gap-4 items-start justify-center ">
-          {sessionData?.data.sessions.map((session) => {
+          {sessionData?.data.sessions.map((session, id) => {
             return (
-              <div key={session.id} className="border border-primary min-w-[300px] text-center p-6">
-                <h2 className="text-xl font-semibold">{session.title}</h2>
-                <div className="p-4 flex flex-col gap-8 items-center justify-center">
-                  {session.questions.map((question, id) => {
-                    return (
-                      <div className="flex flex-col gap-6 items-baseline" key={question.id}>
-                        <p>
-                          <span className="font-bold text-primary mr-2">{id + 1}.</span>
-                          {question.title}
-                        </p>
-                        {question.documents.map((document) => {
-                          const fileUrl = `${baseUrl}/media/download/${document.id}`;
-                          return (
-                            <div key={document.id}>
-                              <a href={fileUrl} download>
-                                {document.fileName}
-                              </a>
-                            </div>
-                          );
-                        })}
-                        <div className="flex gap-2 items-center ">
-                          <Input
-                            type="radio"
-                            id={`yes-${question.id}`}
-                            name={question.id.toString()}
-                            onChange={(e) => handleAnswerChange(question.id, 'YES')}
-                          />
-                          <Label htmlFor={`yes-${question.id}`} className="cursor-pointer">
-                            Yes
-                          </Label>
-                          <Input
-                            type="radio"
-                            id={`no-${question.id}`}
-                            name={question.id.toString()}
-                            onChange={(e) => handleAnswerChange(question.id, 'NO')}
-                          />
-                          <Label htmlFor={`no-${question.id}`} className="cursor-pointer">
-                            No
-                          </Label>
-                        </div>
-                        <Textarea
-                          placeholder="Unesite komentar"
-                          value={comments[question.id] || ''}
-                          onChange={(e) => handleCommentChange(question.id, e)}
-                          disabled={!showCommentFields[question.id]}
-                        />
-                        {submittedQuestions[question.id] ? (
-                          <Link href="/results" className={`${buttonVariants({})}  w-full`}>
-                            Pogledaj rezultate
-                          </Link>
-                        ) : (
-                          <Button
-                            className=" w-full"
-                            type="submit"
-                            disabled={!answeredQuestions[question.id]}
-                          >
-                            Pošalji
-                          </Button>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+              <div key={session.id} className=" min-w-[300px] text-center p-6">
+                <Link
+                  href={`/home/${session.id}`}
+                  className={`${buttonVariants({ variant: 'outline' })} !text-3xl !font-bold !p-10`}
+                >
+                  {session.title}
+                </Link>
               </div>
             );
           })}
         </div>
-      </form>
+      </div>
     </div>
   );
 };

@@ -1127,7 +1127,7 @@ const Session = () => {
         {sessionData?.data.sessions.length === 0 ? (
           <h2 className="text-xl font-semibold">Nema sesija</h2>
         ) : (
-          <h2> Danas imamo {sessionData?.data.pageInfo.total} sesiju/e o kojima se glasa:</h2>
+          <h2> imamo {sessionData?.data.pageInfo.total} sesiju/e o kojima se glasa:</h2>
         )}
       </div>
       <form className="mt-4 flex flex-col items-center" onSubmit={handleSend}>

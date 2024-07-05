@@ -49,9 +49,11 @@ export interface Session {
   questions: Question[];
 }
 
-interface Question {
+
+export interface Question {
   id: number;
   title: string;
+  content: string | null;
   sessionId: number;
   documents: Document[];
   votes: any[];
@@ -73,14 +75,7 @@ export interface votesProps {
   choice: string;
 }
 
-export interface questionsProps {
-  id: number;
-  title: string;
-  sessionId: number;
-  documents: Document[];
-  votes: Vote[];
-  comments: any[];
-}
+
 
 interface Vote {
   id: number;
