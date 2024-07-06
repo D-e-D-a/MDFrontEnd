@@ -28,6 +28,7 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import React from 'react';
+import { DialogClose } from '@radix-ui/react-dialog';
 
 export default function Questions() {
   const [questionTitle, setQuestionTitle] = useState('');
@@ -127,13 +128,15 @@ export default function Questions() {
                         </div>
 
                         <DialogFooter>
-                          <Button
-                            onClick={() =>
-                              handleUpdateQuestion(token, question.id.toString(), questionTitle)
-                            }
-                          >
-                            Save
-                          </Button>
+                          <DialogClose>
+                            <Button
+                              onClick={() =>
+                                handleUpdateQuestion(token, question.id.toString(), questionTitle)
+                              }
+                            >
+                              Save
+                            </Button>
+                          </DialogClose>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>

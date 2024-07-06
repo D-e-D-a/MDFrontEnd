@@ -26,6 +26,7 @@ import {
 import { Pen, Plus, Trash, Trash2, X } from 'lucide-react';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -56,7 +57,6 @@ const Sessions = () => {
 
   const handleUpdate = async (token: string, sessionId: string, sessionName: string) => {
     updateSession(token, sessionId, sessionName).then((data) => {
-      console.log('🚀 ~ updateSession ~ data:', data);
       getSession(token).then((data) => {
         setSessions(data?.data);
       });
@@ -64,11 +64,11 @@ const Sessions = () => {
   };
   return (
     <div className="flex flex-col items-center w-full ">
-      <h1 className="text-3xl font-bold mb-10">Sesije</h1>
+      <h1 className="text-3xl font-bold mb-10">Sjednice</h1>
       <Table className="mb-8 w-[90%] mx-auto border">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-lg font-semibold text-slate-500">Session Title</TableHead>
+            <TableHead className="text-lg font-semibold text-slate-500 ">Session Title</TableHead>
             <TableHead className="text-lg font-semibold text-slate-500">Edit</TableHead>
             <TableHead className="text-lg font-semibold text-slate-500">Delete</TableHead>
           </TableRow>
@@ -102,11 +102,13 @@ const Sessions = () => {
                     </div>
 
                     <DialogFooter>
-                      <Button
-                        onClick={() => handleUpdate(token, session.id.toString(), sessionName)}
-                      >
-                        Save
-                      </Button>
+                      <DialogClose>
+                        <Button
+                          onClick={() => handleUpdate(token, session.id.toString(), sessionName)}
+                        >
+                          Save
+                        </Button>
+                      </DialogClose>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -128,15 +130,17 @@ const Sessions = () => {
                     </DialogHeader>
 
                     <DialogFooter>
-                      <Button
-                        variant={'destructive'}
-                        onClick={() => {
-                          deleteSession(token, session.id.toString());
-                          window.location.reload();
-                        }}
-                      >
-                        Delete <Trash2 className="w-4" />
-                      </Button>
+                      <DialogClose>
+                        <Button
+                          variant={'destructive'}
+                          onClick={() => {
+                            deleteSession(token, session.id.toString());
+                            window.location.reload();
+                          }}
+                        >
+                          Delete <Trash2 className="w-4" />
+                        </Button>
+                      </DialogClose>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -166,7 +170,9 @@ const Sessions = () => {
                     />
                   </div>
                   <DialogFooter>
-                    <Button onClick={() => handleSubmit(token, sessionName)}>Add Session</Button>
+                    <DialogClose>
+                      <Button onClick={() => handleSubmit(token, sessionName)}>Add Session</Button>
+                    </DialogClose>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>

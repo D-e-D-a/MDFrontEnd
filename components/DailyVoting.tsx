@@ -116,10 +116,10 @@ const DailyVoting = ({ id }: { id: string | number }) => {
         .map((session) => {
           return (
             <div key={session.id} className=" min-w-[300px] text-center p-6">
-              <div className="p-4 flex flex-col gap-8 items-center justify-center">
+              <div className="p-4 flex flex-col gap-8 items-baseline justify-center ">
                 {session.questions.map((question, id) => {
                   return (
-                    <div className="flex gap-3 items-baseline" key={question.id}>
+                    <div className="flex gap-3 items-center " key={question.id}>
                       <ul className="list-disc font-bold text-primary mr-2 pl-5">
                         <li>{question.title}</li>
                       </ul>
