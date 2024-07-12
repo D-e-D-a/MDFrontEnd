@@ -89,14 +89,14 @@ const Sessions = () => {
                     <DialogHeader>
                       <DialogTitle>Edit session</DialogTitle>
                       <DialogDescription>
-                        Are you sure you want to edit this session?
+                        Jeste li sigurni da želite da izmijenite ovu sjednicu?
                       </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col space-y-1.5">
                       <label htmlFor="title">Sjednica</label>
                       <Input
                         id="title"
-                        placeholder="Naziv sesije"
+                        placeholder="Naziv sjednice"
                         onChange={(e) => setSessionName(e.target.value)}
                       />
                     </div>
@@ -125,7 +125,7 @@ const Sessions = () => {
                     <DialogHeader>
                       <DialogTitle>Delete session</DialogTitle>
                       <DialogDescription>
-                        Are you sure you want to delete this session?
+                        Jeste li sigurni da želite da obrišete ovu sjednicu?
                       </DialogDescription>
                     </DialogHeader>
 
@@ -158,14 +158,14 @@ const Sessions = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Add new session</DialogTitle>
-                    <DialogDescription>Enter the name for the new session.</DialogDescription>
+                    <DialogTitle>Dodaj novu sjednicu</DialogTitle>
+                    <DialogDescription>Unesite ime nove sjednice.</DialogDescription>
                   </DialogHeader>
                   <div className="flex flex-col space-y-1.5">
-                    <label htmlFor="title">Sesija</label>
+                    <label htmlFor="title">Sjedninca</label>
                     <Input
                       id="title"
-                      placeholder="Naziv sesije"
+                      placeholder="Naziv sjednice"
                       onChange={(e) => setSessionName(e.target.value)}
                     />
                   </div>

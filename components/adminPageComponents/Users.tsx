@@ -82,10 +82,8 @@ const Users = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
-                    <DialogDescription>
-                      Make changes to profile here. Click save when you&apos;re done.
-                    </DialogDescription>
+                    <DialogTitle>Izmijenite profil</DialogTitle>
+                    <DialogDescription>Izmijenite podatke o profilu</DialogDescription>
                   </DialogHeader>
                   <div>
                     <div className="grid w-full items-center gap-4">
@@ -201,9 +199,9 @@ const Users = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                    <DialogTitle>Delete profile</DialogTitle>
+                    <DialogTitle>Obrišite profil</DialogTitle>
                     <DialogDescription>
-                      Are you sure you want to delete this profile?
+                      Jeste li sigurni da želite obrisati profil?
                     </DialogDescription>
                   </DialogHeader>
 

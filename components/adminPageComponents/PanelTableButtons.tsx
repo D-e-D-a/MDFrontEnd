@@ -9,7 +9,7 @@ const PanelTableButtons = ({ className }: { className?: string }) => {
   return (
     <div className={cn('absolute right-2 top-2 flex gap-2', className)}>
       <Link href="/admin" className={buttonVariants()}>
-        Sesije
+        Sjednice
       </Link>
       <Link href="/admin/questions" className={buttonVariants()}>
         Pitanja

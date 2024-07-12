@@ -105,7 +105,7 @@ export default function Questions() {
                         <DialogHeader>
                           <DialogTitle>Edit question</DialogTitle>
                           <DialogDescription>
-                            Are you sure you want to edit this question?
+                            Jeste li sigurni da želite da izmijenite pitanje?
                           </DialogDescription>
                         </DialogHeader>
                         <div className="flex flex-col space-y-1.5">
@@ -153,7 +153,7 @@ export default function Questions() {
                         <DialogHeader>
                           <DialogTitle>Delete question</DialogTitle>
                           <DialogDescription>
-                            Are you sure you want to delete this question?
+                            Jeste li sigurni da želite da obrišete pitanje?
                           </DialogDescription>
                         </DialogHeader>
 
@@ -181,9 +181,9 @@ export default function Questions() {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
-                        <DialogTitle>Add new question</DialogTitle>
+                        <DialogTitle>Dodaj pitanje</DialogTitle>
                         <DialogDescription>
-                          Enter the details for the new question.
+                         Unesite detalje pitanja.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="flex flex-col space-y-1.5">
@@ -203,7 +203,7 @@ export default function Questions() {
                         />
                       </div>
                       <p className="text-sm text-slate-500">
-                        Ukoliko imate da prilozite fajl za sesiju
+                        Ukoliko imate da prilozite fajl za sjedndicu
                       </p>
                       <div className="flex flex-col space-y-1.5 relative">
                         <Input
